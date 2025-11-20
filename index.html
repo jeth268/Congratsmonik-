@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign In - Monik Honors</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    :root{--red:#ff1a1a;--deep:#520000}
+    *{box-sizing:border-box}
+    body{
+      margin:0;min-height:100vh;font-family:'Poppins',sans-serif;
+      display:flex;align-items:center;justify-content:center;overflow:hidden;
+      background:linear-gradient(135deg,var(--deep),#ff3b3b,#ff9aa2);
+    }
+
+    .particle{position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.85);animation:floatUp 6s linear infinite}
+    @keyframes floatUp{0%{transform:translateY(50vh) scale(.5);opacity:0}30%{opacity:1}100%{transform:translateY(-20vh) scale(1.2);opacity:0}}
+
+    .login-card{
+      width:380px;padding:2rem 2.5rem;border-radius:22px;background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.12);color:#fff;position:relative;z-index:10;
+      box-shadow:0 8px 40px rgba(0,0,0,0.4);
+      transition: transform .35s ease, box-shadow .25s ease;
+    }
+    h2{margin:0 0 1rem;font-size:1.6rem;text-align:center;text-shadow:0 0 12px rgba(255,200,200,0.15)}
+
+    .trophy{position:absolute;right:16px;top:14px;font-size:36px;color:gold;opacity:0;transform:scale(.6);transition:all .45s}
+    .glow{position:absolute;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.9),transparent);left:-40px;top:-40px;opacity:0;filter:blur(8px);transition:all .5s}
+
+    .input-group{position:relative;margin:0.6rem 0}
+    input{width:100%;padding:12px;border-radius:10px;border:2px solid transparent;font-size:1rem;background:rgba(255,255,255,0.9);outline:none;transition:all .22s}
+    input:hover{box-shadow:0 0 14px rgba(255,255,255,0.8)}
+    input:focus{box-shadow:0 0 20px rgba(255,0,0,0.95);border-color:rgba(255,26,26,0.6)}
+
+    .toggle-eye{position:absolute;right:12px;top:12px;cursor:pointer;color:#900}
+    .submit-btn{width:100%;padding:12px;border-radius:10px;border:none;background:#fff;color:var(--red);font-weight:700;cursor:pointer}
+
+    .crowd{position:absolute;bottom:0;width:100%;height:90px;background:url('https://i.imgur.com/6jKQjSp.png') repeat-x;opacity:.25;background-size:contain;animation:crowdMove 1s infinite alternate}
+    @keyframes crowdMove{from{transform:translateY(0)}to{transform:translateY(6px)}}
+
+    .shake{animation:shakeAnim .5s}
+    @keyframes shakeAnim{10%{transform:translateX(-8px)}30%{transform:translateX(8px)}50%{transform:translateX(-6px)}70%{transform:translateX(6px)}90%{transform:translateX(-2px)}100%{transform:translateX(0)}}
+
+    .jump{animation:jumpAnim .75s ease forwards}
+    @keyframes jumpAnim{0%{transform:translateY(0)}30%{transform:translateY(-36px)}60%{transform:translateY(0)}100%{transform:translateY(0)}}
+
+    .typing{box-shadow:0 0 26px rgba(255,26,26,0.9) !important}
+  </style>
+</head>
+<body>
+
+  <div class="crowd" aria-hidden="true"></div>
+
+  <script>
+    for(let i=0;i<28;i++){
+      const p=document.createElement('div');
+      p.className='particle';
+      p.style.left=Math.random()*100+'vw';
+      p.style.animationDelay=(Math.random()*4)+'s';
+      p.style.width=(6+Math.random()*10)+'px';
+      p.style.height=p.style.width;
+      document.body.appendChild(p);
+    }
+  </script>
+
+  <div class="login-card" id="loginCard">
+    <div class="glow" id="glow"></div>
+    <div class="trophy" id="trophy">🏆</div>
+
+    <h2>Welcome Monik 🎉</h2>
+
+    <form id="loginForm" novalidate>
+      <div class="input-group">
+        <input id="username" name="username" placeholder="Username" autocomplete="username" required>
+      </div>
+
+      <div class="input-group" style="margin-bottom:14px">
+        <input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password" required>
+        <span class="toggle-eye" id="toggleEye" title="Show / hide password">👁️</span>
+      </div>
+
+      <button id="submitBtn" class="submit-btn" type="submit">Sign In</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const toggleEye = document.getElementById('toggleEye');
+      const loginForm = document.getElementById('loginForm');
+      const loginCard = document.getElementById('loginCard');
+      const trophy = document.getElementById('trophy');
+      const glow = document.getElementById('glow');
+
+      [usernameInput, passwordInput].forEach(inp => {
+        inp.addEventListener('input', ()=>{ inp.classList.add('typing'); });
+        inp.addEventListener('focus', ()=>{ inp.classList.add('typing'); });
+        inp.addEventListener('blur', ()=>{ inp.classList.remove('typing'); });
+      });
+
+      loginCard.addEventListener('mouseenter', ()=>{ loginCard.style.boxShadow = '0 20px 60px rgba(255,40,40,0.35)'; });
+      loginCard.addEventListener('mouseleave', ()=>{ loginCard.style.boxShadow = '0 8px 40px rgba(0,0,0,0.4)'; });
+
+      toggleEye.addEventListener('click', ()=>{
+        passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+        toggleEye.textContent = passwordInput.type === 'password' ? '👁️' : '🙈';
+      });
+
+      loginForm.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const u = usernameInput.value.trim();
+        const p = passwordInput.value;
+        if(u === 'monik' && p === 'congratsmonik!'){
+          loginCard.classList.add('jump');
+          trophy.style.opacity = '1'; trophy.style.transform = 'scale(1)';
+          glow.style.opacity = '1';
+          setTimeout(()=>{ window.location.href = 'honors_page.html'; }, 800);
+        } else {
+          loginCard.classList.add('shake');
+          setTimeout(()=>loginCard.classList.remove('shake'),510);
+          try{
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const o = ctx.createOscillator(); const g = ctx.createGain();
+            o.type='sine'; o.frequency.value = 220; g.gain.value = 0.05; o.connect(g); g.connect(ctx.destination); o.start(); setTimeout(()=>{ o.stop(); ctx.close(); },120);
+          }catch(e){}
+        }
+      });
+
+      document.addEventListener('keydown',(ev)=>{ if(ev.key === 'Escape'){ document.activeElement.blur(); } });
+    });
+  </script>
+</body>
+</html>

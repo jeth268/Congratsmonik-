@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Congrats Monik!</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root{--red:#ff1a1a;--deep:#520000;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  min-height:100vh;font-family:'Poppins',sans-serif;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--deep),#ff3b3b,#ff9aa2);
+  overflow:hidden; position:relative;
+}
+
+/* DREAMY BLOBS */
+.blob{position:absolute;border-radius:50%;filter: blur(100px);opacity:0.5;animation:blobMove 30s infinite alternate ease-in-out;z-index:1;}
+.blob1{width:400px;height:400px;background:rgba(255,192,203,0.4);top:5%;left:10%;}
+.blob2{width:350px;height:350px;background:rgba(173,216,230,0.4);top:60%;left:60%;}
+.blob3{width:500px;height:500px;background:rgba(255,255,255,0.2);top:30%;left:35%;}
+.blob4{width:250px;height:250px;background:rgba(255,255,0,0.3);top:20%;left:70%;}
+.blob5{width:300px;height:300px;background:rgba(138,43,226,0.3);top:50%;left:20%;}
+@keyframes blobMove{0%{transform:translate(0,0);}50%{transform:translate(50px,-30px);}100%{transform:translate(-50px,50px);}}
+
+/* HONOR CARD */
+.honor-card{
+  width:420px;padding:2rem;border-radius:20px;
+  background: rgba(0,0,0,0.6); 
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.15);
+  color:#fff; text-align:center;
+  box-shadow:0 12px 50px rgba(0,0,0,0.6);
+  transition: all 0.5s ease;
+  overflow: hidden; position:relative; z-index:10;
+}
+.honor-card.fixed-left{
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+h1{
+  font-size:2rem;
+  margin-bottom:2rem;
+  text-shadow: 0 0 12px rgba(255,200,200,0.3);
+  animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow{from{text-shadow:0 0 12px rgba(255,200,200,0.3);}to{text-shadow:0 0 24px rgba(255,255,255,0.8);}}
+
+/* SONG */
+.song-img{
+  width:100%;height:220px;border-radius:12px;margin-bottom:1rem;
+  object-fit:cover;box-shadow:0 6px 20px rgba(0,0,0,0.3);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+.song-img:hover{transform:scale(1.08);}
+.song-info{margin-bottom:1rem;font-weight:600;font-size:1.1rem;position: relative;transition: transform 0.5s ease, opacity 0.5s ease;}
+
+/* Slide animation classes */
+.slide-left{transform:translateX(120%); opacity:0;}
+.slide-right{transform:translateX(-120%); opacity:0;}
+.slide-in{transform:translateX(0); opacity:1;}
+
+.controls{display:flex;justify-content:center;gap:1rem;margin-bottom:1rem;}
+.controls button{
+  background:rgba(255,255,255,0.3);border:none;padding:12px 16px;border-radius:50%;
+  font-size:1.2rem;color:#fff;cursor:pointer;transition:all 0.2s ease;
+}
+.controls button:hover{background:rgba(255,255,255,0.6);transform:scale(1.1);}
+
+.timeline-container{
+  width:100%; height:10px; background:rgba(255,255,255,0.3); border-radius:5px;
+  margin:10px 0; position: relative; cursor:pointer;
+}
+.progress{height:100%; background:var(--red); border-radius:5px; width:0%;}
+.knob{
+  width:14px;height:14px; background:#fff; border-radius:50%;
+  position:absolute; top:50%; transform:translate(-50%,-50%); cursor:pointer;
+  transition:left 0.1s linear;
+}
+.time-info{display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:0.5rem;}
+
+.volume-container{position:fixed; bottom:20px; right:20px;}
+.volume-btn{
+  background:rgba(255,255,255,0.3); border:none; padding:12px; border-radius:50%;
+  cursor:pointer; color:#fff; font-size:1.2rem; transition:all 0.2s ease;
+}
+.volume-btn:hover{background:rgba(255,255,255,0.6);}
+.volume-popup{
+  display:none; position:absolute; bottom:50px; right:0;
+  background:rgba(0,0,0,0.7); padding:10px; border-radius:10px; width:120px; text-align:center;
+}
+.volume-popup input[type=range]{width:100%;}
+
+/* Image gallery section */
+.image-section{
+  display:none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 70%;
+  max-width: 900px;
+  padding: 20px;
+  background: rgba(0,0,0,0.85);
+  border-radius: 20px;
+  box-shadow: 0 12px 50px rgba(0,0,0,0.6);
+  z-index: 20;
+  overflow-y:auto;
+  color:#fff;
+  opacity:0;
+  transition: all 0.5s ease;
+}
+.image-section.show{
+  display:block;
+  opacity:1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.image-section h2{text-align:center; margin-bottom:1rem;}
+.gallery-grid{
+  display:grid; 
+  grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
+  gap:15px;
+  justify-items:center;
+}
+.gallery-grid img{
+  width:100%;
+  aspect-ratio:1/1; 
+  object-fit:cover;
+  border-radius:12px;
+  transition: transform 0.3s ease;
+}
+.gallery-grid img:hover{transform: scale(1.05);}
+
+/* Gallery button fixed to top-right */
+.gallery-btn{position:fixed; top:20px; right:20px; z-index:15;}
+.gallery-btn button{
+  background:rgba(255,255,255,0.3); border:none; padding:10px; border-radius:50%;
+  cursor:pointer; color:#fff; font-size:1.3rem; transition:all 0.2s ease;
+}
+.gallery-btn button:hover{background:rgba(255,255,255,0.6);}
+
+/* Envelope */
+.envelope{
+  position: fixed;
+  width: 420px;
+  height: auto;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background: linear-gradient(145deg,#ffe6f0,#ffccd5);
+  border-radius: 20px;
+  cursor: pointer;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow:0 12px 50px rgba(0,0,0,0.6);
+  transition: transform 0.3s ease;
+}
+.envelope:hover{transform: translateY(-50%) scale(1.03);}
+.envelope .flap{
+  width:100%;
+  height: 120px;
+  background: #ff99b3;
+  transform-origin: top;
+  transition: transform 0.5s ease;
+  box-shadow: inset 0 -4px 10px rgba(0,0,0,0.2);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:2rem;
+  color:#520000;
+}
+.envelope .flap i{pointer-events:none;}
+.envelope.open .flap{
+  transform: rotateX(-180deg);
+}
+.envelope .envelope-message{
+  display:none;
+  max-height: 350px; /* scroll if too long */
+  overflow-y: auto;
+  padding: 20px;
+  font-size: 1rem;
+  font-weight:600;
+  text-align:center;
+  color:#520000;
+  line-height:1.4rem;
+}
+.envelope.open .envelope-message{
+  display:block;
+}
+.envelope .envelope-message::-webkit-scrollbar{
+  width:6px;
+}
+.envelope .envelope-message::-webkit-scrollbar-thumb{
+  background:rgba(82,0,0,0.5);
+  border-radius:3px;
+}
+
+/* SPARKLES */
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.8;
+  pointer-events: none;
+  box-shadow: 0 0 10px #fff, 0 0 20px #ff99b3, 0 0 30px #ffccd5;
+  animation: sparkleMove linear infinite;
+}
+@keyframes sparkleMove {
+  0% {transform: translateY(0) translateX(0) scale(1);}
+  50% {transform: translateY(-100px) translateX(50px) scale(1.5);}
+  100% {transform: translateY(-200px) translateX(-50px) scale(1);}
+}
+
+/* CONFETTI */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: red;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.8;
+  border-radius: 50%;
+  animation: confettiFall 2s linear forwards;
+}
+@keyframes confettiFall {
+  0% {transform: translateY(0) rotate(0deg);}
+  100% {transform: translateY(800px) rotate(720deg); opacity:0;}
+}
+</style>
+</head>
+<body>
+
+<!-- DREAMY BLOBS -->
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+<div class="blob blob4"></div>
+<div class="blob blob5"></div>
+
+<div class="honor-card" id="honorCard">
+  <h1>Congrats Monik!🎉</h1>
+  <img src="images/chamber.jpg" alt="Song Cover" class="song-img" id="songImg">
+  <div class="song-info" id="songInfo">Chamber of Reflection - Mac Demarco</div>
+
+  <div class="time-info">
+    <span id="currentTime">0:00</span>
+    <span id="duration">0:00</span>
+  </div>
+  <div class="timeline-container" id="timeline">
+    <div class="progress" id="progress"></div>
+    <div class="knob" id="knob"></div>
+  </div>
+
+  <div class="controls">
+    <button id="prevBtn"><i class="fa-solid fa-backward"></i></button>
+    <button id="playBtn"><i class="fa-solid fa-play"></i></button>
+    <button id="nextBtn"><i class="fa-solid fa-forward"></i></button>
+  </div>
+</div>
+
+<!-- Gallery button -->
+<div class="gallery-btn">
+  <button id="imagesBtn"><i class="fa-solid fa-image"></i></button>
+</div>
+
+<!-- Image section -->
+<div class="image-section" id="imageSection">
+  <h2>Gallery</h2>
+  <div class="gallery-grid">
+    <img src="images/1.jpg">
+    <img src="images/2.jpg">
+    <img src="images/3.jpg">
+    <img src="images/4.jpg">
+    <img src="images/5.jpg">
+    <img src="images/6.jpg">
+    <img src="images/7.jpg">
+    <img src="images/8.jpg">
+  </div>
+</div>
+
+<!-- Envelope -->
+<div class="envelope" id="envelope">
+  <div class="flap"><i class="fa-solid fa-envelope"></i></div>
+  <div class="envelope-message">
+    <p>MONIKKKKKKK!!!</p>
+    <p>Congrats on getting with honors! Galing mo! Your hard work really paid off. 💖</p>
+    <p>Keep pushing, keep dreaming big, and know that your family is super proud of you—and we’re always cheering you on!</p>
+    <p>You’ve got this! Galingan mo pa lalo ha 💖</p>
+  </div>
+</div>
+
+<div class="volume-container">
+  <button class="volume-btn" id="volumeBtn"><i class="fa-solid fa-volume-high"></i></button>
+  <div class="volume-popup" id="volumePopup">
+    <input type="range" id="volumeRange" min="0" max="1" step="0.01" value="1">
+  </div>
+</div>
+
+<audio id="audioPlayer"></audio>
+
+<script>
+// MUSIC PLAYER LOGIC
+const songs = [
+  { title: "Chamber of Reflection", artist: "Mac Demarco", src: "songs/chamber of reflection.mp3", img: "images/Chamber.png" },
+  { title: "Blackbird", artist: "The Beatles", src: "songs/Blackbird (Remastered 2009).mp3", img: "images/Blackbird.png" },
+  { title: "Melting", artist: "Kali Uchis", src: "songs/Melting.mp3", img: "images/Melting.png" }
+];
+
+let current = 0;
+const audio = document.getElementById('audioPlayer');
+const playBtn = document.getElementById('playBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const songInfo = document.getElementById('songInfo');
+const songImg = document.getElementById('songImg');
+const timeline = document.getElementById('timeline');
+const progress = document.getElementById('progress');
+const knob = document.getElementById('knob');
+const currentTimeEl = document.getElementById('currentTime');
+const durationEl = document.getElementById('duration');
+const volumeBtn = document.getElementById('volumeBtn');
+const volumePopup = document.getElementById('volumePopup');
+const volumeRange = document.getElementById('volumeRange');
+const imagesBtn = document.getElementById('imagesBtn');
+const imageSection = document.getElementById('imageSection');
+const honorCard = document.getElementById('honorCard');
+const envelope = document.getElementById('envelope');
+
+// SPARKLES
+for (let i = 0; i < 25; i++) {
+  const sparkle = document.createElement('div');
+  sparkle.classList.add('sparkle');
+  sparkle.style.top = `${Math.random() * window.innerHeight}px`;
+  sparkle.style.left = `${Math.random() * window.innerWidth}px`;
+  sparkle.style.animationDuration = `${3 + Math.random() * 5}s`;
+  sparkle.style.opacity = `${0.5 + Math.random() * 0.5}`;
+  document.body.appendChild(sparkle);
+}
+
+// MUSIC FUNCTIONS
+function animateSlide(direction){
+  songImg.classList.remove('slide-left','slide-right','slide-in');
+  songInfo.classList.remove('slide-left','slide-right','slide-in');
+  songImg.classList.add(direction);
+  songInfo.classList.add(direction);
+  setTimeout(()=>{
+    songImg.classList.remove(direction);
+    songInfo.classList.remove(direction);
+    songImg.classList.add('slide-in');
+    songInfo.classList.add('slide-in');
+  },50);
+}
+
+function loadSong(index,direction=null){
+  if(direction) animateSlide(direction);
+  audio.src = songs[index].src;
+  songInfo.textContent = `${songs[index].title} - ${songs[index].artist}`;
+  songImg.src = songs[index].img;
+  audio.load();
+  audio.addEventListener('loadedmetadata', () => {
+    durationEl.textContent = formatTime(audio.duration);
+  });
+  updateProgress();
+}
+
+function playPause(){
+  if(audio.paused){
+    audio.play();
+    playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+  } else {
+    audio.pause();
+    playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+  }
+}
+
+function nextSong(){
+  current = (current+1)%songs.length;
+  loadSong(current,'slide-left');
+  audio.play();
+  playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+}
+
+function prevSong(){
+  current = (current-1+songs.length)%songs.length;
+  loadSong(current,'slide-right');
+  audio.play();
+  playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+}
+
+function formatTime(seconds){
+  const min = Math.floor(seconds/60);
+  const sec = Math.floor(seconds%60);
+  return `${min}:${sec<10?'0':''}${sec}`;
+}
+
+function updateProgress(){
+  if(!audio.duration) return;
+  const timelineWidth = timeline.offsetWidth;
+  const knobWidth = knob.offsetWidth;
+  const percent = audio.currentTime / audio.duration;
+  progress.style.width = `${percent*100}%`;
+  knob.style.left = `${percent*(timelineWidth - knobWidth)}px`;
+  currentTimeEl.textContent = formatTime(audio.currentTime);
+}
+
+timeline.addEventListener('click', e=>{
+  const rect = timeline.getBoundingClientRect();
+  const offsetX = e.clientX - rect.left;
+  const percent = Math.min(Math.max(offsetX / rect.width, 0),1);
+  audio.currentTime = percent*audio.duration;
+  updateProgress();
+});
+
+let dragging = false;
+knob.addEventListener('mousedown', e=>{ dragging = true; });
+document.addEventListener('mousemove', e=>{
+  if(!dragging) return;
+  const rect = timeline.getBoundingClientRect();
+  const knobWidth = knob.offsetWidth;
+  let offsetX = e.clientX - rect.left;
+  offsetX = Math.max(0, Math.min(offsetX, rect.width - knobWidth));
+  const percent = offsetX / (rect.width - knobWidth);
+  audio.currentTime = percent * audio.duration;
+  updateProgress();
+});
+document.addEventListener('mouseup', ()=>{ dragging=false; });
+
+audio.addEventListener('timeupdate', updateProgress);
+playBtn.addEventListener('click', playPause);
+nextBtn.addEventListener('click', nextSong);
+prevBtn.addEventListener('click', prevSong);
+
+volumeBtn.addEventListener('click', ()=>{
+  volumePopup.style.display = volumePopup.style.display==='block'?'none':'block';
+});
+volumeRange.addEventListener('input', ()=>{
+  audio.volume = volumeRange.value;
+});
+
+// Gallery toggle
+imagesBtn.addEventListener('click', ()=>{
+  const isOpen = imageSection.classList.contains('show');
+  if(!isOpen){
+    imageSection.classList.add('show');
+    honorCard.classList.add('fixed-left');
+  } else {
+    imageSection.classList.remove('show');
+    honorCard.classList.remove('fixed-left');
+  }
+});
+
+// Envelope toggle + confetti
+envelope.addEventListener('click', ()=>{
+  envelope.classList.toggle('open');
+
+  // CREATE CONFETTI
+  for(let i=0;i<50;i++){
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti');
+    confetti.style.background = `hsl(${Math.random()*360}, 100%, 60%)`;
+    confetti.style.left = `${envelope.offsetLeft + Math.random()*envelope.offsetWidth}px`;
+    confetti.style.top = `${envelope.offsetTop}px`;
+    confetti.style.width = `${5+Math.random()*5}px`;
+    confetti.style.height = confetti.style.width;
+    document.body.appendChild(confetti);
+    setTimeout(()=>confetti.remove(),2000);
+  }
+});
+
+loadSong(current);
+</script>
+</body>
+</html>
